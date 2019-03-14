@@ -1,0 +1,32 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}{{ title }} {% else %}Patent Search DB{% endif %}
+{% endblock %}
+
+
+{% block content %}
+    <div border="1" class="container">
+      <h3>Showing patents for: </h3>
+      <h3>{{ group }} - {{ code_description }}</h3>
+      <table class="table table-hover table-striped">
+        <tr><th>Country</th><th>Patent count</th></tr>
+          {% for patent in patents %}
+            <tr><td>{{ patent[0] }}</td><td>{{ patent[1]}}</td></tr>
+          {% endfor %}
+    </table>
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+
+
+        <footer>
+          <br>Data source: <a href="http://www.patentsview.org/download/" target="_blank"> PatentsView</a> - <a href="https://www.uspto.gov" target="_blank">USPTO</a></br>
+          <br>Developed by Ignacio MARTIN VELASCO</br>
+        </footer>
+
+
+    </div>
+
+
+{% endblock %}

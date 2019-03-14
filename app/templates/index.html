@@ -1,34 +1,47 @@
-<html>
-    <head>
-        <title>COSI - {{ title }}</title>
-    </head>
-    <body>
-        <h1>Welcome!</h1>
+{% extends 'bootstrap/base.html' %}
 
-          <form action="" method="post" novalidate>
-            {{ form.hidden_tag() }}
-            <p>
-              {{ form.symbol.select }}<br>
-              {{ form.symbol(size=1) }}
+{% block title %}
+    {% if title %}{{ title }} {% else %}Patent Search DB{% endif %}
+{% endblock %}
 
-            {{ form.group.select }}<br>
-            {{ form.group(size=1) }}
-            </p>
-            <p>{{ form.submit() }}</p>
-          </form>
-          <p>
-            {% if patents %}
-              <table>
-                <tr><th>Country</th><th>Patent number</th></tr>
-                {% for patent in patents %}
-                <tr><td>{{ patent[0] }}</td><td>{{ patent[1] }}</td></tr>
-                {% endfor %}
-              </table>
-            {% endif %}
-          </p>
-    </body>
 
-    <footer>
-      <p>Developed by: Ignacio MARTIN VELASCO</p>
-    </footer>
-</html>
+{% block content %}
+    <div class="container">
+      <h1>Welcome!</h1>
+      <h3>To find the number of patents per country, simply click on one of the available patent groups listed below</h3>
+
+      {% if all_groups %}
+      <div class="panel-group">
+        <div class="panel panel-default">
+          {% for item in all_groups %}
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" href="#{{ item[0].replace(" ", "") }}">{{ item[0] }}</a>
+            </h4>
+          </div>
+          <div id="{{ item[0].replace(" ", "") }}" class="panel-collapse collapse">
+            {% for group in item %}
+              {% if group != item[0] %}
+                <div class="panel-body">
+                  <a href="/group/{{ group }}" target="_blank">{{ group }} - {{ cpc_groups_dict.get(group) }}</a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+
+      <footer>
+        <br>Data source: <a href="http://www.patentsview.org/download/" target="_blank"> PatentsView</a> - <a href="https://www.uspto.gov" target="_blank">USPTO</a></br>
+        <br>Developed by Ignacio MARTIN VELASCO</br>
+      </footer>
+
+
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
